@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
+use DateTimeImmutable;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
 
 
-final class CategoryFactory extends ModelFactory
+final class ArticleFactory extends ModelFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
@@ -19,8 +20,12 @@ final class CategoryFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->text(20),
-            'popular' => self::faker()->boolean,
+            'title' => self::faker()->text(20),
+            'intro' => self::faker()->text(30),
+            'description' => self::faker()->text(),
+            'home' => self::faker()->boolean,
+            'trending' => self::faker()->boolean,
+            'createdAt' =>  DateTimeImmutable::createFromMutable(self::faker()->dateTime),
         ];
     }
 
@@ -36,6 +41,6 @@ final class CategoryFactory extends ModelFactory
 
     protected static function getClass(): string
     {
-        return Category::class;
+        return Article::class;
     }
 }

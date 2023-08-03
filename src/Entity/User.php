@@ -2,32 +2,30 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
-class Category
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $username = null;
+
     #[ORM\Column(type: Types::TEXT)]
-    #[Gedmo\Slug(fields: ["name"])]
-    private ?string $slug = null;
+    private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $pwd = null;
 
-    #[ORM\Column]
-    private ?bool $popular = null;
-
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Article::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Article::class)]
     private Collection $article;
 
     public function __construct()
@@ -40,37 +38,38 @@ class Category
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getUsername(): ?string
     {
-        return $this->name;
+        return $this->username;
     }
 
-    public function setName(string $name): static
+    public function setUsername(string $username): static
     {
-        $this->name = $name;
-
-        return $this;
-    }
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
+        $this->username = $username;
 
         return $this;
     }
 
-    public function isPopular(): ?bool
+    public function getEmail(): ?string
     {
-        return $this->popular;
+        return $this->email;
     }
 
-    public function setPopular(bool $popular): static
+    public function setEmail(string $email): static
     {
-        $this->popular = $popular;
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPwd(): ?string
+    {
+        return $this->pwd;
+    }
+
+    public function setPwd(string $pwd): static
+    {
+        $this->pwd = $pwd;
 
         return $this;
     }
@@ -87,7 +86,7 @@ class Category
     {
         if (!$this->article->contains($article)) {
             $this->article->add($article);
-            $article->setCategory($this);
+            $article->setUser($this);
         }
 
         return $this;
@@ -97,8 +96,8 @@ class Category
     {
         if ($this->article->removeElement($article)) {
             // set the owning side to null (unless already changed)
-            if ($article->getCategory() === $this) {
-                $article->setCategory(null);
+            if ($article->getUser() === $this) {
+                $article->setUser(null);
             }
         }
 

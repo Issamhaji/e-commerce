@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
 
 
-final class CategoryFactory extends ModelFactory
+final class UserFactory extends ModelFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
@@ -19,8 +19,9 @@ final class CategoryFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->text(20),
-            'popular' => self::faker()->boolean,
+            'username' => self::faker()->text(20),
+            'email' => self::faker()->email(),
+            'pwd' => self::faker()->password(),
         ];
     }
 
@@ -36,6 +37,6 @@ final class CategoryFactory extends ModelFactory
 
     protected static function getClass(): string
     {
-        return Category::class;
+        return User::class;
     }
 }
